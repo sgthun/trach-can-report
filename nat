@@ -1,0 +1,12 @@
+#!/bin/bash
+
+docker run -d --rm --name iot-msg --network-alias iot-msg --net iot-net nats
+docker run -d --rm --name=iot-msg2 --net=iot-net nats -c nats-server.conf --routes=nats-route://ruser:T0pS3cr3t@iotmsg:6222
+
+echo docker container run --rm -it -v $(pwd):/app --net=iot-net --name=sim node /bin/bash
+echo npm install nats
+echo node /app/sim.js
+
+echo docker container run --rm -it -v $(pwd):/app --net=iot-net --name=rep node /bin/bash
+echo npm install nats
+echo node /app/rep.js
