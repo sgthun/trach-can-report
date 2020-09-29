@@ -1,5 +1,5 @@
 #!/bin/bash
-
+docker network create iot-net
 docker run -d --rm --name iot-msg --network-alias iot-msg --net iot-net nats
 docker run -d --rm --name=iot-msg2 --net=iot-net nats -c nats-server.conf --routes=nats-route://ruser:T0pS3cr3t@iotmsg:6222
 
@@ -9,4 +9,13 @@ echo node /app/sim.js
 
 echo docker container run --rm -it -v $(pwd):/app --net=iot-net --name=rep node /bin/bash
 echo npm install nats
+echo node /app/rep.js
+
+echo docker volume create report-data
+echo docker container run --rm --name rep-data -d --net iot-net -v report-data:/data redis redis-server --appendonly yes
+
+echo docker container run --rm -it -v $PWD:/app --net=iot-net --name=rep-svr node /bin/bash
+echo npm install nats
+echo npm install express
+echo npm install redis
 echo node /app/rep.js
